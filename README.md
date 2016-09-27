@@ -17,6 +17,10 @@ Docker samples and scripts (`eval "$(docker-machine env default)"`\)
 -	elastic.http.port=`9200`
 -	elastic.transport.port=`9300`
 
+> `docker run -d -v "$PWD/config":/usr/share/elasticsearch/config elasticsearch`
+>
+> `docker run -d -v "$PWD/esdata":/usr/share/elasticsearch/data elasticsearch`
+
 ###### Redis
 
 > `docker run --name local-redis redis`
@@ -49,6 +53,8 @@ Docker samples and scripts (`eval "$(docker-machine env default)"`\)
 > `docker run -e WORDPRESS_DB_PASSWORD=localhost -d --name wordpress --link wordpress-mysql:mysql wordpress:4.5.3-apache`
 >
 > `docker run -e WORDPRESS_DB_PASSWORD=localhost -d --name wordpress --link wordpress-mysql:mysql -p 127.0.0.2:8080:80 -v "$PWD/":/var/www/html wordpress`
+>
+> `docker exec CONTAINER_NAME chown -R www-data:www-data /var/www/html` e.g. `docker exec 1499fbd7fd7b chown -R www-data:www-data /var/www/html`
 
 ---
 
