@@ -44,6 +44,8 @@ kafka-console-producer.sh --broker-list $KAFKA --topic test
 kafka-console-consumer.sh --zookeeper $ZOOKEEPER --topic test
 ```
 
+Use `0.0.0.0` with Docker for Mac as it doesn't use `docker-machine`
+ 
 ###### MongoDB
 
 > `docker run --name some-mongo mongo`
