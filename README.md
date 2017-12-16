@@ -34,6 +34,18 @@ Docker samples and scripts (`eval "$(docker-machine env default)"`\)
 -	cassandra.cql.port=`9042`
 -	cassandra.jmx.port=`7199`
 
+###### Kafka
+
+```
+docker run -p 2181:2181 -p 9092:9092 --env ADVERTISED_HOST=`docker-machine ip \`docker-machine active\`` --env ADVERTISED_PORT=9092 spotify/kafka
+export KAFKA=`docker-machine ip \`docker-machine active\``:9092
+export ZOOKEEPER=`docker-machine ip \`docker-machine active\``:2181
+kafka-console-producer.sh --broker-list $KAFKA --topic test
+kafka-console-consumer.sh --zookeeper $ZOOKEEPER --topic test
+```
+
+Use `0.0.0.0` with Docker for Mac as it doesn't use `docker-machine`
+ 
 ###### MongoDB
 
 > `docker run --name some-mongo mongo`
@@ -57,6 +69,11 @@ Docker samples and scripts (`eval "$(docker-machine env default)"`\)
 > `docker exec CONTAINER_NAME chown -R www-data:www-data /var/www/html` e.g. `docker exec 1499fbd7fd7b chown -R www-data:www-data /var/www/html`
 
 ---
+
+###### Postgres
+
+> `docker run --name test-postgres -e POSTGRES_PASSWORD=localhost -d postgres`
+
 
 docker commands
 ===============
