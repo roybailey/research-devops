@@ -1,0 +1,36 @@
+version: '3.3'
+
+services:
+  wordpress-mysql:
+    container_name: wordpress-mysql
+    image: mysql:5.7
+    volumes:
+      - ../mysql/mysql-setup.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: localhost
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: localhost
+
+  wordpress:
+    container_name: wordpress
+    depends_on:
+      - wordpress-mysql
+    image: wordpress:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - wp_html:/var/www/html
+    restart: always
+    links:
+      - wordpress-mysql
+    environment:
+      WORDPRESS_DB_HOST: wordpress-mysql:3306
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: localhost
+volumes:
+  db_data: {}
+  wp_html: {}
