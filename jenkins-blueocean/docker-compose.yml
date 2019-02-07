@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  jenkins:
+    image: jenkinsci/blueocean
+    volumes:
+    - ../build/var/jenkins_home_ocean:/var/jenkins_home
+    - /var/run/docker.sock:/var/run/docker.sock
+    user: root
+    ports:
+    - "9090:8080"
+    privileged: true
+    restart: on-failure

@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    volumes:
+    - ../build/var/jenkins_home_lts:/var/jenkins_home
+    - /var/run/docker.sock:/var/run/docker.sock
+    user: root
+    ports:
+    - "9090:8080"
+    - "50000:50000"
+    privileged: true
+    restart: on-failure
