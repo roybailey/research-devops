@@ -1,0 +1,34 @@
+version: '3.3'
+
+services:
+  odinium-test-wordpress-mysql:
+    container_name: odinium-test-wordpress-mysql
+    image: mysql:5.7
+    volumes:
+    - ./mysql/mysql-setup.sql:/docker-entrypoint-initdb.d/init.sql
+    - ./build/var/lib/mysql-odinium-test:/var/lib/mysql
+    restart: always
+    ports:
+    - "3317:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: localhost
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: localhost
+
+  odinium-test-wordpress:
+    container_name: odinium-test-wordpress
+    depends_on:
+    - odinium-test-wordpress-mysql
+    image: wordpress:latest
+    ports:
+    - "8017:80"
+    volumes:
+    - ./build/var/www/html-odinium-test:/var/www/html
+    restart: always
+    links:
+    - odinium-test-wordpress-mysql
+    environment:
+      WORDPRESS_DB_HOST: odinium-test-wordpress-mysql
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: localhost

@@ -3,12 +3,48 @@ research-docker
 
 Docker samples and scripts (`eval "$(docker-machine env default)"`\)
 
+## Docker Compose
+
+`docker-compose up`
+
+`docker-compose -d up` run in daemon background mode
+
+`docker-compose -f [docker-compose.yml] up` run using custom docker-compose file config
+
+
+###### MySQL `https://hub.docker.com/_/mysql/`
+
+> `docker run --name wordpress-mysql -e MYSQL_ROOT_PASSWORD=localhost -d mysql:5.7.14`
+
+-	`docker run -it --link wordpress-mysql:mysql --rm mysql sh -c 'exec mysql -h"$MYSQL_PORT_3306_TCP_ADDR" -P"$MYSQL_PORT_3306_TCP_PORT" -uroot -p"$MYSQL_ENV_MYSQL_ROOT_PASSWORD"'`
+
+
+###### WordPress `https://hub.docker.com/_/wordpress/`
+
+> `docker run --name 4.5.3-apache --link wordpress-mysql:mysql -d wordpress`
+>
+> `docker run -e WORDPRESS_DB_PASSWORD=localhost -d --name wordpress --link wordpress-mysql:mysql wordpress:4.5.3-apache`
+>
+> `docker run -e WORDPRESS_DB_PASSWORD=localhost -d --name wordpress --link wordpress-mysql:mysql -p 127.0.0.2:8080:80 -v "$PWD/":/var/www/html wordpress`
+>
+> `docker exec CONTAINER_NAME chown -R www-data:www-data /var/www/html` e.g. `docker exec 1499fbd7fd7b chown -R www-data:www-data /var/www/html`
+
+---
+
+*All-In-One WP Migration* plugin seems simplest and reliable option for cloning a wordpress site, content and database.
+https://help.servmask.com/2018/10/27/how-to-increase-maximum-upload-file-size-in-wordpress/
+
+*Getting wordpress to run under different port* requires changing the Site URL under General Settings
+using the working port (80 or 8080), then restarting wordpress under new port number.
+
+
 ###### Neo4j
 
 > `docker run --publish=8484:7474 --publish=8688:7687 --volume=$HOME/neo4j/data:/data neo4j:3.0`
 
 -	neo4j.web.port=`8484`
 -	neo4j.bolt.port=`8688`
+
 
 ###### Elastic Search
 
@@ -21,11 +57,13 @@ Docker samples and scripts (`eval "$(docker-machine env default)"`\)
 >
 > `docker run -d -v "$PWD/esdata":/usr/share/elasticsearch/data elasticsearch`
 
+
 ###### Redis
 
 > `docker run --name local-redis redis`
 
 -	redis.port=`6379`
+
 
 ###### Cassandra
 
@@ -33,6 +71,7 @@ Docker samples and scripts (`eval "$(docker-machine env default)"`\)
 
 -	cassandra.cql.port=`9042`
 -	cassandra.jmx.port=`7199`
+
 
 ###### Kafka
 
@@ -46,29 +85,13 @@ kafka-console-consumer.sh --zookeeper $ZOOKEEPER --topic test
 
 Use `0.0.0.0` with Docker for Mac as it doesn't use `docker-machine`
  
+
 ###### MongoDB
 
 > `docker run --name some-mongo mongo`
 
 -	mongo.port=`27017`
 
-###### MySQL `https://hub.docker.com/_/mysql/`
-
-> `docker run --name wordpress-mysql -e MYSQL_ROOT_PASSWORD=localhost -d mysql:5.7.14`
-
--	`docker run -it --link wordpress-mysql:mysql --rm mysql sh -c 'exec mysql -h"$MYSQL_PORT_3306_TCP_ADDR" -P"$MYSQL_PORT_3306_TCP_PORT" -uroot -p"$MYSQL_ENV_MYSQL_ROOT_PASSWORD"'`
-
-###### WordPress `https://hub.docker.com/_/wordpress/`
-
-> `docker run --name 4.5.3-apache --link wordpress-mysql:mysql -d wordpress`
->
-> `docker run -e WORDPRESS_DB_PASSWORD=localhost -d --name wordpress --link wordpress-mysql:mysql wordpress:4.5.3-apache`
->
-> `docker run -e WORDPRESS_DB_PASSWORD=localhost -d --name wordpress --link wordpress-mysql:mysql -p 127.0.0.2:8080:80 -v "$PWD/":/var/www/html wordpress`
->
-> `docker exec CONTAINER_NAME chown -R www-data:www-data /var/www/html` e.g. `docker exec 1499fbd7fd7b chown -R www-data:www-data /var/www/html`
-
----
 
 ###### Postgres
 
@@ -151,3 +174,7 @@ Lists all containers
 > docker rm `docker ps -aq`
 
 Removes all dead containers
+
+> docker volume ls
+
+List all volumes
