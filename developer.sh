@@ -11,6 +11,7 @@ ulimit -u 1024
 # aliases
 alias l="ls -l"
 alias ll="ls -al"
+alias lastmodified='find . -type f -exec stat -f "%Sm %N" -t "%Y%m%d%H%M" {} \; | sort -r'
 
 alias bitbucket="echo cd ~/Coding/bitbucket; cd ~/Coding/bitbucket"
 alias github="echo cd ~/Coding/github; cd ~/Coding/github"

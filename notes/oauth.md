@@ -78,7 +78,7 @@ Public clients are browsers, mobile apps, and IoT devices.
 
 ### OAuth Tokens
 
-**Clients us Access Tokens to access the Resource Server (API)**. Short-lived (hours/minutes). Designed for internet scale problems. Because short lived and scale out, can’t be revoked, wait for them to time out.
+**Clients use Access Tokens to access the Resource Server (API)**. Short-lived (hours/minutes). Designed for internet scale problems. Because short lived and scale out, can’t be revoked, wait for them to time out.
 
 **The other token is the refresh token**. Longer-lived (days/months/years). Used to get refresh token, applications typically require confidential clients with authentication.
 
@@ -103,15 +103,15 @@ The tokens are meant to be consumed by the client application so it can access r
 
 **Authorisation Code Flow = 3 legged = front and back channel**, front to get grants, back to get tokens, assumes Resource Owner and public client on different device.
 
-Client Credential Flow = service account scenario = confidential client application acting on own, not on behalf of user. Only need client’s credentials to do the whole flow. Back channel only flow to obtain an access token using the client’s credentials. Supports shared secrets or assertions as client credentials signed with either symmetric or asymmetric keys.
+**Client Credential Flow = service account scenario = confidential client application acting on own, not on behalf of user.** Only need client’s credentials to do the whole flow. Back channel only flow to obtain an access token using the client’s credentials. Supports shared secrets or assertions as client credentials signed with either symmetric or asymmetric keys.
 
 **Symmetric-key algorithms are cryptographic algorithms that allow you to decrypt anything, as long as you have the password.** This is often found when securing PDFs or .zip files.
 
 **Public key cryptography, or asymmetric cryptography, is any cryptographic system that uses pairs of keys: public keys and private keys.** Public keys can be read by anyone, private keys are sacred to the owner. This allows data to be secure without the need to share a password.
 
-Resource Owner Password Flow = legacy = not recommended for old-school clients.
+**Resource Owner Password Flow = legacy = not recommended (for old-school clients).**
 
-Assertion Flow = allows an Authorization Server to trust authorization grants from third parties such as SAML IdP. The Authorization Server trusts the Identity Provider. The assertion is used to obtain an access token from the token endpoint. This is great for companies that have invested in SAML or SAML-related technologies and allow them to integrate with OAuth. Because SAML assertions are short-lived, there are no refresh tokens in this flow and you have to keep retrieving access tokens every time the assertion expires.
+**Assertion Flow = allows an Authorization Server to trust authorization grants from third parties such as SAML IdP.** The Authorization Server trusts the Identity Provider. The assertion is used to obtain an access token from the token endpoint. This is great for companies that have invested in SAML or SAML-related technologies and allow them to integrate with OAuth. Because SAML assertions are short-lived, there are no refresh tokens in this flow and you have to keep retrieving access tokens every time the assertion expires.
 
 **Device Flow = no web browser, just a controller for something like a TV.** A user code is returned from an authorization request that must be redeemed by visiting a URL on a device with a browser to authorize. A back channel flow is used by the client application to poll for authorization approval for an access token and optionally a refresh token.
 
