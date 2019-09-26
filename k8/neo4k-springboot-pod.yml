@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: neo4k-springboot
+  labels:
+    app: neo4k-springboot
+spec:
+  containers:
+    - name: neo4k-springboot
+      image: neo4k/neo4k-springboot
+      imagePullPolicy: Never
