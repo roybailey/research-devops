@@ -98,6 +98,10 @@ Use `0.0.0.0` with Docker for Mac as it doesn't use `docker-machine`
 > `docker run --name test-postgres -e POSTGRES_PASSWORD=localhost -d postgres`
 
 
+###### Jira
+
+> `docker run -v jiraVolume:/var/atlassian/application-data/jira --name="jira" -d -p 3456:8080 atlassian/jira-software`
+
 docker commands
 ===============
 
