@@ -98,7 +98,7 @@ echo $fg_bold[blue] "    feat:$reset_color allow provided config object to exten
 echo $fg_bold[blue] "    docs:$reset_color correct spelling of CHANGELOG"
 echo $fg_bold[blue] "    fix:$reset_color minor typos in code, fixes issue #12"
 echo $fg_bold[blue] "gpd     $reset_color 'git push --dry-run'"
-echo $fg_bold[blue] "gsup    $reset_color 'git push --set-upstream origin <git_current_branch>'"
+echo $fg_bold[blue] "gpsup   $reset_color 'git push --set-upstream origin <git_current_branch>'"
 echo $fg_bold[blue] "gpu     $reset_color 'git push upstream'"
 echo ---------- software installed ----------
 echo `git --version`
