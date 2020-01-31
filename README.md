@@ -3,6 +3,11 @@ research-docker
 
 Docker samples and scripts (`eval "$(docker-machine env default)"`\)
 
+## Docker Commands
+
+`docker logs -f <container>` follow a log
+
+
 ## Docker Compose
 
 `docker-compose up`
