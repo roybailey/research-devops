@@ -20,3 +20,6 @@ target/
 node_modules/
 bower_components/
 public/_assets
+keystore
+keystore/
+
