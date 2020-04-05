@@ -1,0 +1,179 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: Template to create a VPC with three subnets
+
+Parameters:
+  KeyName:
+    Description: Name of SSH KeyPair
+    Type: 'AWS::EC2::KeyPair::KeyName'
+    ConstraintDescription: Provide the name of an existing SSH key pair
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value:  !Join ['', [!Ref "AWS::StackName", "-VPC" ]]
+  # INTERNET-GATEWAY
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value:  !Join ['', [!Ref "AWS::StackName", "-IGW" ]]
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+  # SUBNETS
+  SubnetPublic1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: us-east-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value:  !Join ['', [!Ref "AWS::StackName", "-10.0.1.0/24" ]]
+  SubnetPublic2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: us-east-1b
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value:  !Join ['', [!Ref "AWS::StackName", "-10.0.2.0/24" ]]
+  SubnetPrivate1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.3.0/24
+      AvailabilityZone: us-east-1c
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value:  !Join ['', [!Ref "AWS::StackName", "-10.0.3.0/24" ]]
+  SubnetPrivate2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.4.0/24
+      AvailabilityZone: us-east-1d
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value:  !Join ['', [!Ref "AWS::StackName", "-10.0.4.0/24" ]]
+  # ROUTE TABLES
+  RouteTablePublic:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value:  !Join ['', [!Ref "AWS::StackName", "-RT-PUBLIC" ]]
+  RouteTablePrivate:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value:  !Join ['', [!Ref "AWS::StackName", "-RT-PRIVATE" ]]
+  # ROUTING
+  InternetRoute:
+    Type: AWS::EC2::Route
+    DependsOn: VPCGatewayAttachment
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+      RouteTableId: !Ref RouteTablePublic
+  SubnetPublic1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTablePublic
+      SubnetId: !Ref SubnetPublic1
+  SubnetPublic2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTablePublic
+      SubnetId: !Ref SubnetPublic2
+  SubnetPrivate1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTablePrivate
+      SubnetId: !Ref SubnetPrivate1
+  SubnetPrivate2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTablePrivate
+      SubnetId: !Ref SubnetPrivate2
+  # SECURITY GROUPS
+  SecurityGroupInternet:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "Internet Group"
+      GroupDescription: "SSH traffic in, all traffic out."
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Join ['', [!Ref "AWS::StackName", "-SG-PUBLIC" ]]
+  # EC2 INSTANCES
+  EC2InstanceWebServer:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-0fc61db8544a617ed
+      KeyName: !Ref KeyName
+      SubnetId: !Ref SubnetPublic1
+      Tags:
+        - Key: Name
+          Value: !Join ['', [!Ref "AWS::StackName", "-EC2-WEB-SERVER" ]]
+
+Outputs:
+  VPC:
+    Description: Created VPC
+    Value: !Ref VPC
+
+  PublicSubnets:
+    Description: Public subnets
+    Value: !Join [ ",", [ !Ref SubnetPublic1, !Ref SubnetPublic2 ]]
+
+  PrivateSubnets:
+    Description: Private subnets
+    Value: !Join [ ",", [ !Ref SubnetPrivate1, !Ref SubnetPrivate2 ]]
+
+  PublicSubnet1:
+    Description: Public subnet 1st Availability Zone
+    Value: !Ref SubnetPublic1
+
+  PublicSubnet2:
+    Description: Public subnet 2nd Availability Zone
+    Value: !Ref SubnetPublic2
+
+  PrivateSubnet1:
+    Description: Private subnet 1st Availability Zone
+    Value: !Ref SubnetPrivate1
+
+  PrivateSubnet2:
+    Description: Private subnet 2nd Availability Zone
+    Value: !Ref SubnetPrivate2
+
+  NoIngressSecurityGroup:
+    Description: Internet Security Group
+    Value: !Ref SecurityGroupInternet
