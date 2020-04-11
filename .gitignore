@@ -22,6 +22,6 @@ node_modules
 bower_components
 public/_assets
 keystore
-*.tfstate
-*.backup
+*.tfstate*
+*.tfstate.*
 templates
