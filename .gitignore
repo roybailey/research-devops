@@ -24,4 +24,5 @@ public/_assets
 keystore
 *.tfstate*
 *.tfstate.*
-templates
+templates*
+
