@@ -172,9 +172,9 @@ CMD ["node","--version"]
 
 Builds a new docker image container from current folder
 
-> `docker run -it <tag-name>`
+> `docker run -it <tag-name> sh`
 
-Run a container with this image, interactive
+Run a container with this image, interactive and into shell
 
 > `docker ps -a`
 

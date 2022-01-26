@@ -159,11 +159,15 @@ Assigns virtual IP within the cluster.
 
 ## Commands
 
-| Command | Description |
+| Kubernetes Command | Description |
 |--|--|
+| `kubectl config use-context docker-desktop` | Switch to docker-desktop K8 context |
+| `kubectl get node` | Get all nodes |
+| `kubectl get svc --namespace default -w my-apache` | Watch the status of a service |
 | `kubectl run <name> --image=<namespace>/<image-name> --image-pull-policy=Never --port=<port-number>` | Runs a container image in a pod configured with port mapping |
 | `kubectl get pods -o wide` | Gets running pods with extra details |
 | `kubectl describe pods` | Gets running pods with verbose details |
+| `kubectl logs <POD_NAME>` | View logs of pod
 | `kubectl get all` | Shows all deployments, replicasets and pods running |
 | `kubectl expose deployment <pod-name> --type=NodePort` | Exposes node port for named pod |
 | `minikube service <pod-name> --url` | Exposes pod url when running in minukube |
@@ -181,6 +185,33 @@ Assigns virtual IP within the cluster.
 | `clear; kubectl get all --all-namespaces -o wide` | Gets everything in cluster, inc. system  |
 | `kubectl get secrets` | Gets all secrets |
 
+| Helm Command | Description |
+|--|--|
+| `https://artifacthub.io/` | Public helm chart hub |
+| `helm repo add bitnami https://charts.bitnami.com/bitnami` | Adding a Helm repository for helm to search |
+| `helm install my-apache bitnami/apache --version 8.0.2` | Install container |
+| `helm upgrade my-apache bitnami/apache --version 8.0.3` | Upgrade a container |
+| `helm list` | Lists deployed helm charts |
+| `helm rollback my-apache 1` | Rollback to earlier revision |
+| `helm delete my-apache` | Remove a deployment |
+| `helm install my-release bitnami/wordpress` | Install Wordpress |
+| `export SERVICE_IP=$(kubectl get svc --namespace default my-release-wordpress --template "{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}")` | Get service IP address |
+| `$(kubectl get secret --namespace default my-wordpress-3 -o jsonpath="{.data.wordpress-password}" | base64 --decode)` | Output wordpress password |
+| `helm create <name>` | creates `<name>` subfolder with helm chart basics |
+| `helm get manifest <name>` | Gets the helmchart resources that are installed for this chart name |
+| `helm install --debug --dry-run <name> <chart-folder>` | Shows rendered template but does not install |
+| `helm ... --set livenessProbe.httpGet=null` | remove a default values.yaml property and all its nested properties |
+| `helm install my-wordpress-prod bitnami/wordpress --version 10.1.4 -f values-production.yaml` | install multi-instance wordpress |
+
+| Helm Template | Description |
+|--|--|
+| `{{.Release.name}}}}` | Simple property value from standard object |
+| `{{.Values.name}}}}` | Simple property value from `values.yaml` |
+| `{{lower .Values.custom.prefix}}` | function call passing value |
+| `{{.Values.custom.suffix | upper}}` | function call piped value |
+| `{{ .Values.drink | default "tea" | quote | upper }}` | assigning default value |
+
+`
 ## Application Tips
 
 * `jib-maven-plugin` builds docker images, maintains same image if code not changed
