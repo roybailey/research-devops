@@ -6,7 +6,12 @@
 
 1. `brew install nginx` install
 2. `brew services start nginx` start and start on login
-2. `brew services stop nginx` stop server and remove from login
-3. `nginx -s stop` stop the service
-4. `nginx -t` get the config path e.g. `/usr/local/etc/nginx/nginx.conf`
-5. `brew services restart nginx` restart the service
+3. `brew services stop nginx` stop server and remove from login
+4. `nginx -s stop` stop the service
+5. `nginx -t` get the config path e.g. `/usr/local/etc/nginx/nginx.conf`
+6. `brew services restart nginx` restart the service
+
+IP Address
+```text
+89.242.5.222
+```

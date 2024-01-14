@@ -81,17 +81,22 @@ http {
 
     # another virtual host using mix of IP-, name-, and port-based configuration
 
-    server {
-        listen       80;
-        listen       odinium.com:80;
-        server_name  odinium.com  www.odinium.com;
-
-        location / {
-            root   /Users/roybailey/Coding/github/website/odinium/public;
-            index  index.html index.htm;
-        }
-    }
-
+#     server {
+#         listen       80;
+#         listen       odinium.com:80;
+#         server_name  odinium.com  www.odinium.com;
+#
+#         location / {
+#             root   /Users/roybailey/Coding/github/website/odinium/public;
+#             index  index.html index.htm;
+#         }
+#     }
+#     server {
+#         listen 80 default_server;
+#         listen [::]:80 default_server;
+#         server_name _;
+#         return 301 https://$host$request_uri;
+#     }
     server {
         listen       443 ssl;
         listen       odinium.com:443 ssl;
@@ -100,36 +105,29 @@ http {
         ssl_certificate /etc/nginx/certificate/nginx-certificate.crt;
         ssl_certificate_key /etc/nginx/certificate/nginx.key;
 
-        ssl_session_cache    shared:SSL:1m;
-        ssl_session_timeout  5m;
-
         location / {
             root   /Users/roybailey/Coding/github/website/odinium/public;
             index  index.html index.htm;
         }
     }
 
+#     server {
+#         listen 443 ssl default_server;
+#         listen [::]:443 ssl default_server;
+#         ssl_certificate /etc/nginx/certificate/nginx-certificate.crt;
+#         ssl_certificate_key /etc/nginx/certificate/nginx.key;
+#         root /Users/roybailey/Coding/github/website/odinium/public;
+#         index index.html index.htm index.nginx-debian.html;
+#         server_name  odinium.com  www.odinium.com;
+#         location / {
+#                 try_files $uri $uri/ =404;
+#         }
+#     }
+
     server {
         listen       80;
         listen       roybailey.biz:80;
         server_name  roybailey.biz  www.roybailey.biz;
-
-        location / {
-            root   /Users/roybailey/Coding/websites/roybailey.biz/public;
-            index  index.html index.htm;
-        }
-    }
-
-    server {
-        listen       443 ssl;
-        listen       roybailey.biz:443 ssl;
-        server_name  roybailey.biz  www.roybailey.biz;
-
-        ssl_certificate /etc/nginx/certificate/nginx-certificate.crt;
-        ssl_certificate_key /etc/nginx/certificate/nginx.key;
-
-        ssl_session_cache    shared:SSL:1m;
-        ssl_session_timeout  5m;
 
         location / {
             root   /Users/roybailey/Coding/websites/roybailey.biz/public;
