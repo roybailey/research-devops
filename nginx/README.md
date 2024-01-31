@@ -15,3 +15,19 @@ IP Address
 ```text
 89.242.5.222
 ```
+
+## Installing certificates
+
+* See [LetsEncrypt](https://letsencrypt.org/getting-started/)
+* See [certbot for nginx on MacOS](https://certbot.eff.org/instructions?ws=nginx&os=osx)
+
+* Install `brew install certbot`
+* Create file `echo hi > /var/www/letsencrypt/.well-known/acme-challenge/hi`
+* Config nginx
+```yaml
+location ^~ /.well-known/acme-challenge/ {
+  default_type "text/plain";
+  rewrite /.well-known/acme-challenge/(.*) /$1 break;
+  root /var/www/letsencrypt;
+}
+```
